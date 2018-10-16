@@ -2,19 +2,21 @@ FROM ubuntu:16.04
 
 MAINTAINER Joe Momma
 
-RUN locale-gen en_US.UTF-8
+RUN apt-get clean && apt-get update \
+    && apt-get install -y sudo vim wget locales \
+    && locale-gen en_US.UTF-8
 
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 RUN apt-get update \
-    && apt-get install -y nginx curl zip unzip git software-properties-common supervisor sqlite3 \
+    && apt-get install -y nginx curl zip unzip git software-properties-common supervisor \
     && add-apt-repository -y ppa:ondrej/php \
     && apt-get update \
-    && apt-get install -y php7.1-fpm php7.1-cli php7.1-gd \
-       php7.1-imap php-memcached php7.1-mbstring php7.1-xml php7.1-curl \
-       php7.1-sqlite3 php7.1-xdebug \
+    && apt-get install -y php7.2-fpm php7.2-cli php7.2-gd \
+       php7.2-imap php-memcached php7.2-mbstring php7.2-xml php7.2-curl \
+       php7.2-xdebug \
     && php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer \
     && mkdir /run/php \
     && apt-get remove -y --purge software-properties-common \
@@ -28,8 +30,8 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log \
 
 COPY default /etc/nginx/sites-available/default
 
-COPY php-fpm.conf /etc/php/7.1/fpm/php-fpm.conf
-COPY 20-xdebug.ini /etc/php/7.1/fpm/conf.d/20-xdebug.ini
+COPY php-fpm.conf /etc/php/7.2/fpm/php-fpm.conf
+COPY xdebug.ini /etc/php/7.2/fpm/conf.d/xdebug.ini
 
 EXPOSE 80
 
