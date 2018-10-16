@@ -1,7 +1,8 @@
 <?php
 
 function randomColor(): string {
-    return '#' . bin2hex(random_bytes(3));
+    $bytes = random_bytes(3);
+    return '#' . bin2hex($bytes);
 }
 
 function makeColorfulHeading(): string {
