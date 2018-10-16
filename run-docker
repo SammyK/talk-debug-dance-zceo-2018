@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+docker run --rm -it -p 80:80 \
+    -v $(pwd):/var/www/html \
+    talk-debug-dance
